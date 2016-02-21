@@ -1,0 +1,22 @@
+Pattern #1 Target #1 Run completed: 1 solutions; 2 fail nodes; 6 nodes; 8 milliseconds
+Pattern #1 Target #2 Run completed: 1 solutions; 1 fail nodes; 6 nodes; 6 milliseconds
+Pattern #1 Target #3 Run completed: 1 solutions; 2 fail nodes; 7 nodes; 4 milliseconds
+Pattern #1 Target #4 Run completed: 1 solutions; 6 fail nodes; 7 nodes; 3 milliseconds
+Pattern #1 Target #5 Run completed: 1 solutions; 5 fail nodes; 6 nodes; 3 milliseconds
+Pattern #1 Target #6 Run completed: 0 solutions; 103 fail nodes; 14 nodes; 3 milliseconds
+Pattern #1 Target #7 Run completed: 0 solutions; 59 fail nodes; 5 nodes; 3 milliseconds
+Pattern #1 Target #8 Run completed: 0 solutions; 29 fail nodes; 1 nodes; 2 milliseconds
+Pattern #1 Target #9 Run completed: 1 solutions; 46 fail nodes; 30 nodes; 2 milliseconds
+Pattern #1 Target #10 Run completed: 0 solutions; 157 fail nodes; 65 nodes; 2 milliseconds
+Pattern #1 Target #11 Run completed: 0 solutions; 118 fail nodes; 42 nodes; 2 milliseconds
+Pattern #1 Target #12 Run completed: 0 solutions; 45 fail nodes; 2 nodes; 1 milliseconds
+Pattern #1 Target #13 Run completed: 0 solutions; 27 fail nodes; 2 nodes; 1 milliseconds
+Pattern #1 Target #14 Run completed: 0 solutions; 29 fail nodes; 6 nodes; 1 milliseconds
+Pattern #1 Target #15 Run completed: 0 solutions; 12 fail nodes; 2 nodes; 1 milliseconds
+Pattern #1 Target #16 Run completed: 1 solutions; 4 fail nodes; 8 nodes; 1 milliseconds
+Pattern #1 Target #17 Run completed: 0 solutions; 2 fail nodes; 1 nodes; 1 milliseconds
+Pattern #1 Target #18 Run completed: 0 solutions; 12 fail nodes; 1 nodes; 1 milliseconds
+fail 4: P#1 T#19
+Pattern #1 Target #19 Run completed: 0 solutions; 0 fail nodes; 0 nodes; 0 milliseconds
+Pattern #1 Target #20 Run completed: 0 solutions; 22 fail nodes; 4 nodes; 3 milliseconds
+total cpu time: 1210 milliseconds
