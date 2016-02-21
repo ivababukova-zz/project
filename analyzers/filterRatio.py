@@ -25,25 +25,34 @@ meds=[]
 mini=[]
 maxi=[]
 
-def processFiles(lista):
+def normalize(lista, dbsize):
+    for i in range (0, len(lista)):
+        lista[i] = (lista[i]*100)/(dbsize*1.0)
+
+def processFiles(lista, dbsize):
     for fila in lista:
         alles=[]
         with open(fila) as fp:
             for line in fp.readlines():
                 number = line.strip('\n')
-                alles.append(int(number))
+                alles.append(float(number))
         answ.append(alles[0])
         fail1.append(alles[1])
         fail2.append(alles[2])
         fail3.append(alles[3])
         fail4.append(alles[4])
         fail5.append(alles[5])
+    normalize(fail1, dbsize)
+    normalize(fail2, dbsize)
+    normalize(fail3, dbsize)
+    normalize(fail4, dbsize)
+    normalize(fail5, dbsize)
 
 def average(lista):
-    suma = 0
+    suma = 0.0
     length = len(lista)
     for number in lista:
-        suma = suma + int(number)
+        suma = suma + float(number)
     avgs.append(suma/length)
 
 
@@ -58,7 +67,7 @@ def median(lista):
         meds.append(lista[half+1])
     else:
         suma = lista[half-1] + lista[half]
-        meds.append(suma/2)
+        meds.append(suma/2.0)
 
 def minmax(lista):
     lista.sort()
@@ -66,7 +75,10 @@ def minmax(lista):
     maxi.append(lista[len(lista)-1])
 
 
-processFiles(ppigo1lista)
+#processFiles(aids1lista, 40000)
+#processFiles(pcms1lista, 50)
+#processFiles(pdbs1lista, 30)
+processFiles(ppigo1lista, 20)
 
 average(fail1)
 average(fail2)
