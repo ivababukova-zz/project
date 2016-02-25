@@ -1,3 +1,5 @@
+import sys
+
 aids0statslista = ["nodesStatsSIP0/aids/stats0.txt", "nodesStatsSIP0/aids/stats1.txt", "nodesStatsSIP0/aids/stats2.txt","nodesStatsSIP0/aids/stats3.txt","nodesStatsSIP0/aids/stats4.txt","nodesStatsSIP0/aids/stats5.txt"]
 aids1statslista = ["nodesStatsSIP1/aids/stats0.txt", "nodesStatsSIP1/aids/stats1.txt", "nodesStatsSIP1/aids/stats2.txt","nodesStatsSIP1/aids/stats3.txt","nodesStatsSIP1/aids/stats4.txt","nodesStatsSIP1/aids/stats5.txt"]
 
@@ -11,8 +13,18 @@ ppigo1statslista = ["nodesStatsSIP1/ppigo/statst1_4.3.txt", "nodesStatsSIP1/ppig
 ppigo0statslista = ["nodesStatsSIP0/ppigo/statst1_4.3.txt", "nodesStatsSIP0/ppigo/statst2_8.4.txt", "nodesStatsSIP0/ppigo/stats8_1.6.txt",  "nodesStatsSIP0/ppigo/statst1_4.9.txt", "nodesStatsSIP0/ppigo/statst1_4.9.txt", "nodesStatsSIP0/ppigo/stats4.6.txt", "nodesStatsSIP0/ppigo/statst1_4.3.txt", "nodesStatsSIP0/ppigo/statst2_8.4.txt"]
 
 alles=[]
+allessuma=[]
 
+# calculate the sum of the graphs that 
+def getSuma(fila):
+    suma=0
+    with open(fila) as fp:
+        for line in fp.readlines():
+            number = line.strip('\n')
+            suma = suma + int(number)
+    return suma
 
+# get a list of all nodes and their number of graphs from the file
 def parseStats(fila):
     maxi=0
     smallalles=[]
@@ -21,16 +33,18 @@ def parseStats(fila):
                 maxi=maxi+1
                 number = line.strip('\n')
                 smallalles.append(int(number))
+                sys.stdout.write(number + ",")
+    sys.stdout.write('\n')
     return smallalles
 
 def generatePlotableStats(aids0statslista):
     for fila in aids0statslista:    
-        alles.append(parseStats(fila))
-    return alles
+        #alles.append(parseStats(fila))
+        allessuma.append(getSuma(fila))
 
 generatePlotableStats(aids0statslista)
-print alles
 
+print allessuma
 
 
 

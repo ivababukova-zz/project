@@ -43,12 +43,12 @@ def generateCommand(filelista,statslista):
         fila1=filelista[n]
         fila2=statslista[n]
         maxi=maxNodes(fila1)
-        for i in range(0,maxi+1):
-            if i == 0:
+        for i in range(1,maxi+1):
+            if i == 1:
                 #print "echo " + str(maxi) + " > " + fila2
-                print "grep \"" + str(i) + " nodes;\" " + fila1 + " |wc -l > " + fila2
+                print "grep \" " + str(i) + " nodes;\" " + fila1 + " |wc -l > " + fila2
             else:
-                print "grep \"" + str(i) + " nodes;\" " + fila1 + " |wc -l >> " + fila2
+                print "grep \" " + str(i) + " nodes;\" " + fila1 + " |wc -l >> " + fila2
         n=n+1
 
 
