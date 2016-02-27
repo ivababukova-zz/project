@@ -39,12 +39,12 @@ def parseStats(fila):
 
 def generatePlotableStats(aids0statslista):
     for fila in aids0statslista:    
-        #alles.append(parseStats(fila))
+        alles.append(parseStats(fila))
         allessuma.append(getSuma(fila))
 
-generatePlotableStats(aids0statslista)
+generatePlotableStats(aids1statslista)
 
-print allessuma
+#print allessuma
 
 
 
