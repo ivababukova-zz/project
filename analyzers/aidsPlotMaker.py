@@ -85,12 +85,12 @@ yvals = np.arange(0,percentiles[-1],10)
 
 f, (ax, ax2) = plt.subplots(2, 1, sharex=True)
 ax.set_ylim(609, 750)  # outliers only
-print(dir(ax))
-f.subplots_adjust(top=0.9)
-ax.set_position([0.1, 0.85, 0.8, 0.9])
+#print(dir(ax))
+#f.subplots_adjust(top=0.9)
+#ax.set_position([0.1, 0.85, 0.8, 0.9])
 
 #ax.margins(0.3, 0.3)
-ax2.set_position([0.1, 0.1, 0.8, 0.72])
+#ax2.set_position([0.1, 0.1, 0.8, 0.72])
 
 
 ax2.set_ylim(0, 140)  # most of the data

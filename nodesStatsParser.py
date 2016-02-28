@@ -42,7 +42,7 @@ def generatePlotableStats(aids0statslista):
         alles.append(parseStats(fila))
         allessuma.append(getSuma(fila))
 
-generatePlotableStats(aids1statslista)
+generatePlotableStats(aids0statslista)
 
 #print allessuma
 

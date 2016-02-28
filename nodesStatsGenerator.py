@@ -37,7 +37,19 @@ def maxNodes(fila):
                     maxi = number              
     return maxi
 
-def generateCommand(filelista,statslista):
+def maxMilis(fila):
+    maxi=0
+    with open(fila) as fp:
+        for line in fp.readlines():
+            linelista=line.split(";")
+            if len(linelista) > 1:
+                nodeslista = linelista[3].split(" ")
+                number = int(nodeslista[1])
+                if number > maxi:
+                    maxi = number              
+    return maxi
+
+def generateNodesCommand(filelista,statslista):
     n = 0
     while(n < len(filelista)):
         fila1=filelista[n]
@@ -51,8 +63,23 @@ def generateCommand(filelista,statslista):
                 print "grep \" " + str(i) + " nodes;\" " + fila1 + " |wc -l >> " + fila2
         n=n+1
 
+def generateMilisCommand(filelista,statslista):
+    n = 0
+    while(n < len(filelista)):
+        fila1=filelista[n]
+        fila2=statslista[n]
+        maxi=maxMilis(fila1)
+        for i in range(1,maxi+1):
+            if i == 1:
+                #print "echo " + str(maxi) + " > " + fila2
+                print "grep \" " + str(i) + " miliseconds\"" + fila1 + " |wc -l > " + fila2
+            else:
+                print "grep \" " + str(i) + " miliseconds;\" " + fila1 + " |wc -l >> " + fila2
+        n=n+1
 
-generateCommand(aids0lista,aids0statslista)
+
+
+generateNodesCommand(aids0lista,aids0statslista)
 
 
 
