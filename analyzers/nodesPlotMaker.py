@@ -1,109 +1,118 @@
+import itertools
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from numpy.random import normal
+import copy
 
 
-numbers0y=[10506,342,3704,1564,2508,921,1622,710,3437,1468,1719,986,872,609,538,312,
-543,286,461,360,297,266,191,159,89,105,101,83,64,60,79,45,135,31,36,24,40,
-15,20,20,18,12,18,2,23,11,3,6,29,7,26,153,11,21,12,9,3,3,4,6,7,6,2,10,19,
-0,5,0,2,4,0,1,1,2,0,0,0,2,1,3,1,0,1,0,1,0,0,0,0,0,0,1,2,0,0,0,0,0,0,1,1,0,
-5,0,5,0,1,1,0,0,0,0,1]
+alldata=[]
 
-numbers1y=[231,13,195,85,226,238,166,200,1391,1280,1397,801,610,531,433,594,452,409,
-552,615,762,526,560,403,586,546,385,333,401,299,661,518,593,339,429,526,
-599,384,446,270,707,428,538,371,419,452,536,260,447,259,472,441,326,312,349,
-365,457,273,324,230,429,273,355,234,311,209,400,238,297,187,270,237,367,176,
-217,149,311,190,166,124,229,166,256,124,177,100,143,210,144,108,142,144,255,
-102,162,87,159,182,117,98,139,78,170,62,97,62,89,94,96,74,63,44,103,51,71,
-30,105,49,59,50,62,32,54,36,57,24,50,41,48,34,71,19,50,27,35,22,30,33,31,19,
-49,18,22,14,55,15,12,18,26,12,22,11,21,8,28,11,19,12,14,11,20,2,21,14,21,15,
-36,10,14,5,11,7,8,3,12,9,14,6,2,5,16,3,11,1,8,10,20,7,8,2,8,2,4,4,7,0,2,1,4,
-1,12,7,5,4,11,7,0,13,6,6,7,7,8,3,6,3,6,4,7,0,9,2,5,3,9,2,5,7,4,3,1,0,5,2,6,
-0,2,7,6,2,5,0,3,7,4,7,2,7,2,0,7,3,7,13,2,1,1,3,4,2,3,0,1,0,2,0,0,2,1,0,2,0,
-2,0,0,2,0,0,1,0,2,1,1,1,0,0,0,0,1,1,0,2,0,0,1,0,1,0,1,0,3,2,0,1,1,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,1]
+def getData(fila):
+    lista=[]
+    with open(fila) as fp:
+        for flista in fp.readlines():
+            flista=flista[:-2].split(",")
+            i = 0
+            maxi = max(len(lista),len(flista))
+            templista=[0]*len(flista)
+            if len(lista) > 0:
+                templista=lista[:]
+                lista=[]
+                if len(templista) < maxi:
+                    lendiff = maxi-len(templista)
+                    templista.extend([0]*lendiff)
+                elif len(flista) < maxi:
+                    lendiff = maxi - len(flista)
+                    flista.extend([0]*lendiff)
+            while i < maxi:
+                #print templista[i]
+                lista.append(int(templista[i]) + int(flista[i]))
+                i=i+1
+                #print maxi,i
+    for i in range(0,len(lista)):
+        lista[i] = lista[i]
+    return lista
 
-numbers2y=[8828,3409,4453,703,959,912,784,449,1553,580,619,399,356,165,181,128,312,58,
-135,27,69,19,56,23,45,14,18,18,7,10,18,5,20,7,15,2,8,2,6,4,14,2,4,2,14,3,3,
-2,8,4,2,4,4,3,3,5,5,1,5,0,0,4,4,4,8,8,4,4,1,1,1,0,4,1,0,0,0,0,2,1,0,0,1,0,0,
-0,2,0,0,0,1,4,0,0,1,0,0,0,0,1,1,0,0,3,1,0,0,0,0,1]
-
-numbers3y=[6990,191,1095,822,2932,2192,1795,930,2457,896,1411,956,1387,721,1201,663,
-1049,523,564,443,683,409,372,243,397,193,282,218,276,195,186,170,196,106,164,
-115,185,84,91,85,105,61,65,45,85,44,54,26,69,33,31,21,23,17,19,37,37,24,30,
-10,32,11,17,10,33,13,14,11,22,15,11,12,23,12,9,4,8,8,5,7,12,9,10,1,81,5,28,8,
-16,7,5,1,6,0,9,2,0,5,3,1,1,3,2,0,3,2,5,2,2,9,1,0,3,2,0,0,2,0,0,1,2,0,0,1,0,0,
-0,0,1,2,2,3,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,3]
-
-numbers4y=[7991,1675,3926,1537,1931,814,1041,506,563,399,321,218,238,90,117,50,92,38,
-105,11,32,20,36,8,7,8,10,7,10,8,15,7,67,2,7,5,9,8,12,2,3,0,1,2,0,0,1,1,2,0,1]
-
-numbers5y=[1766,144,189,110,24,3,21,0,4,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3]
-import itertools
-
-alla = map(sum, itertools.izip_longest(numbers0y, numbers1y, numbers2y, numbers3y, numbers4y, numbers5y, fillvalue=0))
+def makeIndices(limit):
+    lista=[]
+    for i in range(0,limit):
+        lista.append(i)
+    return lista
 
 
 
-plt.title('SIP0 nodes')
-plt.xlabel('Number of nodes')
-plt.ylabel('Number of targets')
+alla = getData("../aids1nodes.txt")
+sumAlla = sum(alla)
+percentile = sumAlla/100
+print(sumAlla % 100)
+print percentile
 
-#def numbx(srclista):
-#    dstlista=[]
-#    for i in range(0,len(srclista)):
-#        dstlista.append(i)
-#    return dstlista
+percentiles = [0]*100
+lowPercentiles = [0]*100
+currentPercentile = percentile
+percentileCounter = 0
+lowPercentileCounter = 0
+index = 0
+first = True
+while index < len(alla):
+    deduction = min(alla[index], currentPercentile)
+    if first and deduction != 0:# and not last:
+        lowPercentiles[lowPercentileCounter] = index
+        lowPercentileCounter += 1
+        first = False
+    currentPercentile -= deduction
+    alla[index] -= deduction
+    if currentPercentile == 0:
+        percentiles[percentileCounter] = index
+        currentPercentile = percentile
+        percentileCounter += 1
+        if percentileCounter != 99:
+            first = True
+    if alla[index] == 0:
+        index += 1
 
-#numbers0x=numbx(numbers0y)
-#numbers1x=numbx(numbers1y)
-#numbers2x=numbx(numbers2y)
-#numbers3x=numbx(numbers3y)
-#numbers4x=numbx(numbers4y)
-#numbers5x=numbx(numbers5y)
+percentiles[99] = len(alla) - 1
+print(percentiles)
+print(lowPercentiles)
 
-def maxim(lista):
-    maxi=0
-    for el in lista:
-        if el > maxi:
-            maxi = el
-    return maxi
+xvals = np.arange(0, 101, 10)
+yvals = np.arange(0,percentiles[-1],10)
+
+#fig = plt.figure()
+#ax = fig.add_subplot(2,1,1)
 
 
-lista=[]
-lista.append(len(numbers0y))
-lista.append(len(numbers1y))
-lista.append(len(numbers2y))
-lista.append(len(numbers3y))
-lista.append(len(numbers4y))
-lista.append(len(numbers5y))
+f, (ax, ax2) = plt.subplots(2, 1, sharex=True)
+ax.set_ylim(609, 750)  # outliers only
+print(dir(ax))
+f.subplots_adjust(top=0.9)
+ax.set_position([0.1, 0.85, 0.8, 0.9])
 
-maxi = maxim(lista)
+#ax.margins(0.3, 0.3)
+ax2.set_position([0.1, 0.1, 0.8, 0.72])
 
-print alla
 
-xvalues = np.arange(1, maxi+1, maxi/20)
-yvalues = np.arange(0, 50, 2)
-plt.yticks(yvalues)
+ax2.set_ylim(0, 140)  # most of the data
 
-plt.hist(alla, bins=xvalues, color='purple')
+for i, perc in enumerate(percentiles):
+    ax.bar(i, perc,  color = 'blue')
+    ax2.bar(i, perc,  color = 'blue')
+
+plt.xlabel('percentile of population')
+plt.ylabel('difficulty measured in search nodes')
+plt.xticks(xvals)
+#for i, perc in enumerate(percentiles):
+#    plt.bar(i, perc,  color = 'blue')
+
 #plt.plot(numbers1x, numbers1y, marker = 'x', color = 'b')
 
-plt.ylim(0, 50)
-
-
-#plt.xticks(xvalues)
-
+plt.xlim(0, 100)
+#ax.set_yscale('log')
+ax.yaxis.grid(True)
+ax.xaxis.grid(True)
+ax2.yaxis.grid(True)
+ax2.xaxis.grid(True)
 #r1y=np.arange(1, maxi+1, 1)
 
 #print zip(alla, r1y)
