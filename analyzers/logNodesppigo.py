@@ -4,7 +4,7 @@ import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from numpy.random import normal
 import copy
-
+from matplotlib.ticker import FormatStrFormatter
 
 alldata=[]
 
@@ -31,7 +31,7 @@ def getData(fila):
                 i=i+1
                 #print maxi,i
     for i in range(0,len(lista)):
-        lista[i] = lista[i]/4
+        lista[i] = lista[i]
     return lista
 
 def makeIndices(limit):
@@ -42,15 +42,16 @@ def makeIndices(limit):
 
 
 
-alla = getData("../pcms1nodes.txt")
-sumAlla = sum(alla)
-percentile = sumAlla/100
+#alla = getData("../ppigo1nodes.txt")
+alla=getData("../ppigoSATnodes.txt")
 print alla
-print(sumAlla % 100)
-print percentile
+sumAlla = sum(alla)
+percentile = sumAlla/4
+#print(sumAlla % 100)
+#print percentile
 
-percentiles = [0]*100
-lowPercentiles = [0]*100
+percentiles = [0]*4
+lowPercentiles = [0]*4
 currentPercentile = percentile
 percentileCounter = 0
 lowPercentileCounter = 0
@@ -68,57 +69,41 @@ while index < len(alla):
         percentiles[percentileCounter] = index
         currentPercentile = percentile
         percentileCounter += 1
-        if percentileCounter != 99:
+        if percentileCounter != 3:
             first = True
         else:
             break
     if alla[index] == 0:
         index += 1
 
-percentiles[99] = len(alla) - 1
+percentiles[3] = len(alla) - 1
 print(percentiles)
-print(lowPercentiles)
+#print(lowPercentiles)
 
-xvals = np.arange(0, 101, 10)
+xvals = np.arange(0, 5, 1)
 yvals = np.arange(0,percentiles[-1],10)
 
-#fig = plt.figure()
-#ax = fig.add_subplot(2,1,1)
 
-
-f, (ax, ax2) = plt.subplots(2, 1, sharex=True)
-#ax.set_ylim(400, 70000)  # outliers only
-#print(dir(ax))
-#f.subplots_adjust(top=0.9)
-#ax.set_position([0.1, 0.85, 0.8, 0.9])
-
-#ax.margins(0.3, 0.3)
-#ax2.set_position([0.1, 0.1, 0.8, 0.72])
-ax.set_ylim(10400, 10800)
-ax2.set_ylim(0, 400)
-#ax2.set_ylim(0, 400)  # most of the data
+plt.yscale('log')
 
 for i, perc in enumerate(percentiles):
-    ax.bar(i, perc,  color = 'blue')
-    ax2.bar(i, perc,  color = 'blue')
+    plt.bar(i, perc, bottom=0, log=True, color='b')
+    print i,perc
 
-plt.xlabel('percentile of population')
+plt.xlabel('quartile of population')
 plt.ylabel('difficulty measured in search nodes')
-plt.xticks(xvals)
-#for i, perc in enumerate(percentiles):
-#    plt.bar(i, perc,  color = 'blue')
 
-#plt.plot(numbers1x, numbers1y, marker = 'x', color = 'b')
-
-plt.xlim(0, 100)
+labels=["1","2","3","4"]
+plt.xticks(xvals, labels)
+plt.xlim(0, 4)
+#plt.yscale('log')
+plt.grid(True, which='major', color='b')
+plt.grid(True, which='minor', color='r')
+#ax = plt.gca()
 #ax.set_yscale('log')
-#ax2.set_yscale('log')
-ax.yaxis.grid(True)
-ax.xaxis.grid(True)
-ax2.yaxis.grid(True)
-ax2.xaxis.grid(True)
-#r1y=np.arange(1, maxi+1, 1)
+plt.tick_params(axis='y', which='minor')
 
-#print zip(alla, r1y)
+#ax.yaxis.set_minor_formatter(FormatStrFormatter("%.1f"))
 
-#plt.show()
+
+plt.show()

@@ -78,25 +78,25 @@ def minmax(lista):
 #processFiles(aids1lista, 40000)
 #processFiles(pcms1lista, 50)
 #processFiles(pdbs1lista, 30)
-processFiles(ppigo1lista, 20)
+#processFiles(ppigo1lista, 20)
 
-average(fail1)
-average(fail2)
-average(fail3)
-average(fail4)
-average(fail5)
+#average(fail1)
+#average(fail2)
+#average(fail3)
+#average(fail4)
+#average(fail5)
 
-median(fail1)
-median(fail2)
-median(fail3)
-median(fail4)
-median(fail5)
+#median(fail1)
+#median(fail2)
+#median(fail3)
+#median(fail4)
+#median(fail5)
 
-minmax(fail1)
-minmax(fail2)
-minmax(fail3)
-minmax(fail4)
-minmax(fail5)
+#minmax(fail1)
+#minmax(fail2)
+#minmax(fail3)
+#minmax(fail4)
+#minmax(fail5)
 
 def printLista(lista):
     i = 0
@@ -106,12 +106,34 @@ def printLista(lista):
         else:
             sys.stdout.write(str(numb) + "\n")
         i=i+1
-#print answ
-#print fail1
-#print fail2
-#print fail3
-#print fail4
-#print fail5
+
+
+# generate statistics for the number of solvable instances of eahc dataset
+aidsansw=[8042,11957,78,461,77,3]
+pcmsansw=[38,144,124,136,4,20,4,4,4]
+pdbsansw=[500,580,460,136,360,300,580]
+ppigoansw=[12,7,13,17,12]
+
+normalize(aidsansw,40000)
+normalize(pcmsansw,200)
+normalize(pdbsansw,600)
+normalize(ppigoansw,50)
+
+
+median(aidsansw)
+median(pcmsansw)
+median(pdbsansw)
+median(ppigoansw)
+
+average(aidsansw)
+average(pcmsansw)
+average(pdbsansw)
+average(ppigoansw)
+
+minmax(aidsansw)
+minmax(pcmsansw)
+minmax(pdbsansw)
+minmax(ppigoansw)
 
 printLista(avgs)
 printLista(meds)

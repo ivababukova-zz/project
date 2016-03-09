@@ -17,19 +17,27 @@ data = [[9.453,  22.222,   0,   0    ], # 1
         [6.701,  12.444,   0,   0    ], # 3
         [27.263,  4.444,   0,   3.75 ], # 4
         [19.387,      0,   0,   0    ], # 5
-        [32.881, 59.113, 100,   96.25]] # sip
+
+
+        [24.211, 26.313, 22.78,   35.25], # unsat sip
+        [8.67, 32.8, 77.22, 61]] # sat sip
+
+
 
 columns = ('AIDS', 'PCMS', 'PDBS', 'PPIGO')
-rows = (" SIP", " Fail 5 ", " Fail 4 ", " Fail 3 ", " Fail 2 ", " Fail 1 ")
+rows = (" SAT SIP", " UNSAT SIP ", " Fail 5 ", " Fail 4 ", " Fail 3 ", " Fail 2 ", " Fail 1 ")
 
-values = np.arange(0, 100, 5)
+values = np.arange(0, 101, 5)
 
 # Get some pastel shades for the colors
 #colors = plt.cm.BuPu(np.linspace(0, 0.8, len(rows))) # sip0
-colors = plt.cm.Reds(np.linspace(0, 0.8, len(rows)))
+#colors = plt.cm.Reds(np.linspace(0, 0.8, len(rows)))
+#colors = plt.cm.BuPu(np.linspace(0,0.8,1))
+colors = plt.cm.Reds(np.linspace(0, 1, len(rows)))
 n_rows = len(data)
 
 index = np.arange(len(columns)) + 0.3
+print index
 bar_width = 0.4
 
 # Initialize the vertical-offset for the stacked bar chart.
@@ -60,6 +68,6 @@ plt.subplots_adjust(left=0.2, bottom=0.2)
 plt.ylabel("Percent of all (p,t) pairs")
 plt.yticks(values, ['%d' % val for val in values])
 plt.xticks([])
-plt.title('')
+#plt.title('')
 
 plt.show()

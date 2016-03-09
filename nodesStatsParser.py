@@ -12,6 +12,17 @@ pdbs1statslista = ["nodesStatsSIP1/pdbs/stats16_103l.0.txt", "nodesStatsSIP1/pdb
 ppigo1statslista = ["nodesStatsSIP1/ppigo/statst1_4.3.txt", "nodesStatsSIP1/ppigo/statst2_8.4.txt", "nodesStatsSIP1/ppigo/stats8_1.6.txt", "nodesStatsSIP1/ppigo/statst1_4.9.txt", "nodesStatsSIP1/ppigo/statst1_4.9.txt", "nodesStatsSIP1/ppigo/stats4.6.txt", "nodesStatsSIP1/ppigo/statst1_4.3.txt", "nodesStatsSIP1/ppigo/statst2_8.4.txt"]
 ppigo0statslista = ["nodesStatsSIP0/ppigo/statst1_4.3.txt", "nodesStatsSIP0/ppigo/statst2_8.4.txt", "nodesStatsSIP0/ppigo/stats8_1.6.txt",  "nodesStatsSIP0/ppigo/statst1_4.9.txt", "nodesStatsSIP0/ppigo/statst1_4.9.txt", "nodesStatsSIP0/ppigo/stats4.6.txt", "nodesStatsSIP0/ppigo/statst1_4.3.txt", "nodesStatsSIP0/ppigo/statst2_8.4.txt"]
 
+
+# SAT stats
+aidsSAT=["SATstats/aids1SATstats.tx"]
+aidsUNSAT=["SATstats/aids1UNSATstats.tx"]
+pcmsSAT=["SATstats/pcms1SATstats.tx"]
+pcmsUNSAT=["SATstats/pcms1UNSATstats.tx"]
+pdbsSAT=["SATstats/pdbs1SATstats.tx"]
+pdbsUNSAT=["SATstats/pdbs1UNSATstats.tx"]
+ppigoSAT=["SATstats/ppigo1SATstats.tx"]
+ppigoUNSAT=["SATstats/ppigo1UNSATstats.tx"]
+
 alles=[]
 allessuma=[]
 
@@ -42,7 +53,7 @@ def generatePlotableStats(aids0statslista):
         alles.append(parseStats(fila))
         allessuma.append(getSuma(fila))
 
-generatePlotableStats(aids0statslista)
+generatePlotableStats(ppigoUNSAT)
 
 #print allessuma
 

@@ -25,6 +25,16 @@ pdbs1statslista = ["nodesStatsSIP1/pdbs/stats16_103l.0.txt", "nodesStatsSIP1/pdb
 ppigo1statslista = ["nodesStatsSIP1/ppigo/statst1_4.3.txt", "nodesStatsSIP1/ppigo/statst2_8.4.txt", "nodesStatsSIP1/ppigo/stats8_1.6.txt", "nodesStatsSIP1/ppigo/statst1_4.9.txt", "nodesStatsSIP1/ppigo/statst1_4.9.txt", "nodesStatsSIP1/ppigo/stats4.6.txt", "nodesStatsSIP1/ppigo/statst1_4.3.txt", "nodesStatsSIP1/ppigo/statst2_8.4.txt"]
 ppigo0statslista = ["nodesStatsSIP0/ppigo/statst1_4.3.txt", "nodesStatsSIP0/ppigo/statst2_8.4.txt", "nodesStatsSIP0/ppigo/stats8_1.6.txt",  "nodesStatsSIP0/ppigo/statst1_4.9.txt", "nodesStatsSIP0/ppigo/statst1_4.9.txt", "nodesStatsSIP0/ppigo/stats4.6.txt", "nodesStatsSIP0/ppigo/statst1_4.3.txt", "nodesStatsSIP0/ppigo/statst2_8.4.txt"]
 
+
+aidsSAT=["SATstats/aids1SAT.tx","SATstats/aids1UNSAT.tx"]
+
+pcmsSAT=["SATstats/pcms1SAT.tx","SATstats/pcms1UNSAT.tx"]
+
+pdbsSAT=["SATstats/pdbs1SAT.tx","SATstats/pdbs1UNSAT.tx"]
+
+ppigoSAT=["SATstats/ppigo1SAT.tx","SATstats/ppigo1UNSAT.tx"]
+
+
 def maxNodes(fila):
     maxi=0
     with open(fila) as fp:
@@ -55,13 +65,29 @@ def generateNodesCommand(filelista,statslista):
         fila1=filelista[n]
         fila2=statslista[n]
         maxi=maxNodes(fila1)
+        print maxi
         for i in range(1,maxi+1):
             if i == 1:
-                #print "echo " + str(maxi) + " > " + fila2
+                print "echo " + str(maxi) + " > " + fila2
                 print "grep \" " + str(i) + " nodes;\" " + fila1 + " |wc -l > " + fila2
             else:
                 print "grep \" " + str(i) + " nodes;\" " + fila1 + " |wc -l >> " + fila2
         n=n+1
+
+def generateSATCommand(filelista,satlista,isSAT):
+    n = 0
+    while(n < len(filelista)):
+        fila1=filelista[n]
+        if isSAT == 0:
+            fila2=satlista[1] # the file in the list that will contain unsat
+        else:
+            fila2=satlista[0] # the file in the list that will contain sat
+        if n == 0:
+            print "grep \": " + str(isSAT) + " solutions; \" " + fila1 + " > " + fila2
+        else:
+            print "grep \": " + str(isSAT) + " solutions; \" " + fila1 + " >> " + fila2
+        n=n+1
+
 
 def generateMilisCommand(filelista,statslista):
     n = 0
@@ -69,6 +95,7 @@ def generateMilisCommand(filelista,statslista):
         fila1=filelista[n]
         fila2=statslista[n]
         maxi=maxMilis(fila1)
+        print maxi
         for i in range(1,maxi+1):
             if i == 1:
                 #print "echo " + str(maxi) + " > " + fila2
@@ -79,7 +106,7 @@ def generateMilisCommand(filelista,statslista):
 
 
 
-generateNodesCommand(aids0lista,aids0statslista)
+generateSATCommand(ppigo1lista,ppigoSAT,1)
 
 
 
