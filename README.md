@@ -33,7 +33,7 @@ where the jar is saved and type the following command:
 
     java -cp Iva-Index3.jar Main <patterns filename> <targets filename>
 
-This runs SIP1, as this is the default solver. To run SIP0, add <-SIP0> argument after the name of the targets
+- This runs SIP1, as this is the default solver. To run SIP0, add <-SIP0> argument after the name of the targets
 filename.
 
 - To run the code along with information about which instance failed, add <-e> after the name of the targets 
@@ -49,6 +49,7 @@ is unsatisfiable. The first line of the .txt file is for failure 1, second line 
 results folders are stored. Type in the following commands:
 
     python nodesStatsGenerator.py > script.sh
+    
     ./script.sh
 
 - nodesSATparser.py takes the files created by nodesStatsGenerator.py in directory SATstats and (TODO)
