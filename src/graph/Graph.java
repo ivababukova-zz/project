@@ -5,87 +5,86 @@ import java.io.*;
 
 public class Graph {
 
-    private int order;              // numb of vertices
-    private int size;               // numb of edges
-    private String id;              // graph id
-    private int[] degree;           // degree of vertices
-    private BitSet[] neighbors;     // neighbors[v] is neighbors of v
-    private String[] vlabels;      // labeled vertices
 
-    private Label[] labels;      // all unique labels that occur in the graph
+    private int      order;     // numb of vertices
+    private int      size;      // numb of edges
+    private String   id;        // graph id
+    private int[]    degree;    // degree of vertices, degree[u] = the degree of vertex u
+    private BitSet[] neighbors; // neighbors[v] is neighbors of v
+    private String[] vlabels;   // the labels of the vertices
+    private Label[]  labels;    // all unique labels that occur in the graph
+
 
     public Graph (String fname) throws IOException {this(new Scanner(new File(fname)));}
 
+    /* reads the input from @sc and constructs the graph */
     public Graph (Scanner sc) throws IOException {
-        HashMap<String,ArrayList<Integer>> labels = new HashMap<>(); // every label and the ids of vertices that have it
-        int maxLabelFrequency = 0; // the max size of the int[] that stores the label deg seq
-        id     = sc.next();
-        order = sc.nextInt();
-        degree = new int[order];
-        neighbors = new BitSet[order];
-        vlabels = new String[order];
+        /* every label and the ids of vertices that have it
+        *  avoids reiterating over the vlabels array multiple times when constructing NDS
+        * */
+        HashMap<String,ArrayList<Integer>> labelsMap = new HashMap<>();
+        id          = sc.next();
+        order       = sc.nextInt();
+        degree      = new int[order];
+        neighbors   = new BitSet[order]; // initialize to size of order in case the graph is a clique
+        vlabels     = new String[order];
 
         // initialize bitsets
         for (int i=0; i<order; i++) {
             neighbors[i] = new BitSet(order);
         }
-
         // construct vertices:
         for (int i=0; i<order; i++) {
-            String newL = sc.next();
+            String newL = sc.next(); // get string of label
             vlabels[i] = newL;
-            if (labels.get(newL) == null) {
+            if (labelsMap.get(newL) == null) { // haven't had a label with such string before
                 ArrayList<Integer> vertexid  = new ArrayList<>();
                 vertexid.add(i);
-                labels.put(newL,vertexid);
+                labelsMap.put(newL,vertexid);
             }
             else{
-                labels.get(newL).add(i);
-                int labelFrequency = labels.get(newL).size();
-                if (maxLabelFrequency < labelFrequency) {
-                    maxLabelFrequency = labelFrequency;
-                }
+                labelsMap.get(newL).add(i);
             }
         }
-
         // construct edges:
         size = sc.nextInt();
         for (int i=0;i< size;i++){
             int u = sc.nextInt();
             int v = sc.nextInt();
-            neighbors[u].set(v,true);
-            neighbors[v].set(u, true);
+            // if changing code for direct graphs, modify to set the bit of only one of them
+            neighbors[u].set(v,true); // set the v-th bit in the neighbor bitset of u to true
+            neighbors[v].set(u, true); // set the u-th bit in the neighbor bitset of v to true
             degree[u] = degree[u] + 1;
             degree[v] = degree[v] + 1;
         }
-        setDegreeSequence(labels, maxLabelFrequency);
+        // construct neighbourhood degree sequence of the graph
+        setNDS(labelsMap);
     }
 
     /**
      * Sets the degree sequence for each unique label that occurs in the graph
      * @param labels is generated during the graph construction
      * */
-    private void setDegreeSequence(HashMap<String,ArrayList<Integer>> labels, int frequency){
-        int labelsN = labels.size();
+    private void setNDS(HashMap<String, ArrayList<Integer>> labels){
+        int numbOfLabels = labels.size();
         String label;
         Iterator labelsIterator = labels.keySet().iterator();
-        ArrayList<Integer> vertexids;
-        this.labels = new Label[labelsN];
-        for (int i = 0; i < labelsN; i++){
-            label = labelsIterator.next().toString();
-            vertexids = labels.get(label);
-            Label l = new Label(label,vertexids.size());
-            this.labels[i] = l;
-            for (int j = 0; j < vertexids.size(); j++) {
-                int vdegree = this.degree[vertexids.get(j)];
-                l.insertDegree(vdegree);
+        ArrayList<Integer> vertexids; // the ids of vertices that are labeled with the corresponding label
+        this.labels = new Label[numbOfLabels];
+        for (int i=0; i<numbOfLabels; i++){
+            label           = labelsIterator.next().toString();
+            vertexids       = labels.get(label);
+            this.labels[i]  = new Label(label,vertexids.size());
+            for (int j=0; j<vertexids.size(); j++) {
+                this.labels[i].insertDegree(this.degree[vertexids.get(j)]);
             }
         }
+        displayDegreeSequence();
     }
 
     public void display(){
-        System.out.println(id);
-        System.out.println(order);
+        System.out.println("graph id:" + id);
+        System.out.println("graph order:" + order);
         for (int i=0;i< order;i++) System.out.println(vlabels[i]);
         System.out.println(size);
         for (int i=0;i< order -1;i++)
@@ -93,11 +92,12 @@ public class Graph {
                 if (neighbors[i].get(j)) System.out.println(i +" "+ j);
     }
 
+    /* prints the degree sequence of each label in the graph */
     public void displayDegreeSequence(){
         System.out.println(this.getId());
         for (int i = 0; i < this.labels.length; i++) {
             System.out.print(this.labels[i].getLabel() + " <");
-            int[] degrees = labels[i].getDegrees();
+            int[] degrees = labels[i].getDS();
             for (int j = 0; j < degrees.length; j++) {
                 if (j != degrees.length - 1) {
                     System.out.print(degrees[j] + ", ");
@@ -142,6 +142,7 @@ public class Graph {
     }
 
     // get the label that has String label=l
+    // O(numb of unique labels)
     public Label getLabelStr(String l) {
         for (int i = 0; i < labels.length; i++) {
             if (labels[i].getLabel().equals(l)) return labels[i];

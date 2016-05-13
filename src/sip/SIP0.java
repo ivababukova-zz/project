@@ -4,6 +4,11 @@ import java.util.*;
 import java.io.*;
 import graph.*;
 
+
+
+/*
+* not used anymore
+* */
 public class SIP0{
 
     private long nodes;              // number of decisions

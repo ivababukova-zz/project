@@ -14,6 +14,9 @@ public class SIP1{
     private long nodes;              // number of decisions
     private long timeLimit;          // milliseconds
     private long cpuTime;            // milliseconds
+    public long filterTime;
+    public long verifyTime;
+    private long initTime;           // the time when we started the verification stage
     private int[] solution;          // as it says
     private boolean matched;         // is there a matching?
     private boolean trace;           // trace, anyone for trace?
@@ -56,32 +59,40 @@ public class SIP1{
     }
 
     public void solve(){
+        long initTime = System.currentTimeMillis();
         if (P.getOrder() > T.getOrder()) {
             if (isExperimental) {
                 System.out.println("fail 1: P" + P.getId() + " T" + T.getId());
             }
+            this.filterTime = System.currentTimeMillis() - initTime;
             return; // trivial fail
         }
         if (P.numbUniqueLabels() > T.numbUniqueLabels()) {
             if (isExperimental) {
                 System.out.println("fail 2: P" + P.getId() + " T" + T.getId());
             }
+            this.filterTime = System.currentTimeMillis() - initTime;
+            this.verifyTime = 0;
             return; // trivial fail
         }
         // check neighborhood degree sequence:
         for (int i = 0; i < P.numbUniqueLabels(); i++) {
             Label pl = P.getLabel(i);
-            Label tl = T.getLabelStr(pl.getLabel());
+            Label tl = T.getLabelStr(pl.getLabel()); // O()
             if (tl == null) {
                 if (isExperimental) {
                     System.out.println("fail 3: P" + P.getId() + " T" + T.getId());
                 }
+                this.filterTime = System.currentTimeMillis() - initTime;
+                this.verifyTime = 0;
                 return; // trivial fail
             }
-            if (!isCompatible(pl.getDegrees(), tl.getDegrees())) {
+            if (!isCompatible(pl.getDS(), tl.getDS())) {
                 if (isExperimental) {
                     System.out.println("fail 4: P" + P.getId() + " T" + T.getId());
                 }
+                this.filterTime = System.currentTimeMillis() - initTime;
+                this.verifyTime = 0;
                 return; // trivial fail
             }
         }
@@ -98,17 +109,26 @@ public class SIP1{
                 if (isExperimental) {
                     System.out.println("fail 5: P" + P.getId() + " T" + T.getId());
                 }
+                this.filterTime = System.currentTimeMillis() - initTime;
+                this.verifyTime = 0;
                 return; // trivial fail, no bits were set to true, no values in the domain
             }
             U[i] = new Variable(i,domain);
         }
+        this.filterTime =  System.currentTimeMillis() - initTime;
+        this.initTime = System.currentTimeMillis();
         try{expand(U);} catch(TimeOutException e){timeout = true;}
     }
 
     public boolean expand(Variable[] U){
         if (timeLimit > 0 && System.currentTimeMillis() - cpuTime >= timeLimit) throw new TimeOutException();
         int n = U.length;
-        if (n == 0){solutions++; if (verbose) display(); return firstSolution;}
+        if (n == 0){
+            solutions++;
+            if (verbose) display();
+            this.verifyTime = System.currentTimeMillis() - this.initTime;
+            return firstSolution;
+        }
         nodes++;
         Variable[] newU = new Variable[n-1];
         Variable u = select(U); // select the smallest domain
@@ -118,7 +138,7 @@ public class SIP1{
             solution[u.index] = i;
             for (int j = 0, k = 0; j < n && consistent; j++){
                 Variable v = U[j];
-                if (u.index != v.index){
+                if (u.index != v.index){ // if the chosen u is not picked again and assigned to v
                     Variable newV = new Variable(v.index,(BitSet)v.domain.clone());
                     newV.domain.set(i,false); // cannot take value assigned to u
                     if (P.getNeighbours(u.index).get(v.index)) // adjacent(u,v) in P
@@ -130,6 +150,7 @@ public class SIP1{
             }
             consistent = consistent && expand(newU);
         }
+        this.verifyTime = System.currentTimeMillis() - this.initTime;
         return consistent;
     }
 
@@ -162,26 +183,6 @@ public class SIP1{
         this.timeLimit = timeLimit;
     }
 
-    public void setSolution(int[] solution) {
-        this.solution = solution;
-    }
-
-    public void setCpuTime(long cpuTime) {
-        this.cpuTime = cpuTime;
-    }
-
-    public void setMatched(boolean matched) {
-        this.matched = matched;
-    }
-
-    public void setTrace(boolean trace) {
-        this.trace = trace;
-    }
-
-    public void setTimeout(boolean timeout) {
-        this.timeout = timeout;
-    }
-
     public void setFirstSolution(boolean firstSolution) {
         this.firstSolution = firstSolution;
     }
@@ -198,10 +199,6 @@ public class SIP1{
         this.solutions = solutions;
     }
 
-    public void setFails(int fails) {
-        this.fails = fails;
-    }
-
     public void setP(Graph p) {
         P = p;
     }
@@ -215,40 +212,8 @@ public class SIP1{
         return nodes;
     }
 
-    public long getTimeLimit() {
-        return timeLimit;
-    }
-
-    public long getCpuTime() {
-        return cpuTime;
-    }
-
-    public int[] getSolution() {
-        return solution;
-    }
-
-    public boolean isMatched() {
-        return matched;
-    }
-
-    public boolean isTrace() {
-        return trace;
-    }
-
     public boolean isTimeout() {
         return timeout;
-    }
-
-    public boolean isFirstSolution() {
-        return firstSolution;
-    }
-
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    public boolean isInduced() {
-        return induced;
     }
 
     public int getSolutions() {
@@ -257,10 +222,6 @@ public class SIP1{
 
     public int getFails() {
         return fails;
-    }
-
-    public boolean isExperimental() {
-        return isExperimental;
     }
 
     public void setIsExperimental(boolean isExperimental) {

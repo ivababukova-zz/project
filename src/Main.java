@@ -42,71 +42,52 @@ public class Main {
 
         ArrayList<Graph> patterns = new ArrayList<Graph>();
         Scanner patternScanner = new Scanner(new File(args[0]));
-        //System.out.println("patterns:");
         while (patternScanner.hasNext()) {
             Graph g = new Graph(patternScanner);
             patterns.add(g);
-            //g.displayDegreeSequence();
         }
-        //System.out.println("targets:");
         patternScanner.close();
         ArrayList<Graph> targets = new ArrayList<Graph>();
         Scanner targetScanner = new Scanner(new File(args[1]));
         while (targetScanner.hasNext()) {
             Graph g = new Graph(targetScanner);
             targets.add(g);
-            //g.displayDegreeSequence();
         }
         targetScanner.close();
 
-
-        // TODO:
-        // call indexing the graph from here
-
+        long totalVerifyTime = 0;
+        long totalFilterTime = 0;
         // call SIP from here
         for (Graph P : patterns){
             int solutions = 0;
             int solved = 0;
             for (Graph T : targets){
                 long cpuTime      = System.currentTimeMillis();
-                if (isSIP0) {
-                    SIP0 sip = new SIP0(P, T);
-                    sip.setFirstSolution(true); //firstSolution;
-                    sip.setInduced(induced);
-                    sip.setVerbose(verbose);
-                    sip.setTimeLimit(timeLimit);
-                    sip.setIsExperimental(isExperimental);
-                    sip.solve();
-                    solutions = solutions + sip.getSolutions();
-                    cpuTime   = System.currentTimeMillis() - cpuTime;
-                    System.out.print("Pattern "+ P.getId() +" Target "+ T.getId() +" ");
-                    if (!sip.isTimeout()) solved++;
-                    if (sip.isTimeout()) System.out.print("CPU time exceeded: ");
-                    else System.out.print("Run completed: ");
-                    System.out.print(sip.getSolutions() + " solutions; " + sip.getFails() + " fail nodes; ");
-                    System.out.println(sip.getNodes() +" nodes; "+ cpuTime +" milliseconds"); // +" "+ sip.simple);
-                }
-                else {
-                    SIP1 sip = new SIP1(P, T);
-                    sip.setFirstSolution(true); //firstSolution;
-                    sip.setInduced(induced);
-                    sip.setVerbose(verbose);
-                    sip.setTimeLimit(timeLimit);
-                    sip.setIsExperimental(isExperimental);
-                    sip.solve();
-                    solutions = solutions + sip.getSolutions();
-                    cpuTime = System.currentTimeMillis() - cpuTime;
-                    System.out.print("Pattern " + P.getId() + " Target " + T.getId() + " ");
-                    if (!sip.isTimeout()) solved++;
-                    if (sip.isTimeout()) System.out.print("CPU time exceeded: ");
-                    else System.out.print("Run completed: ");
-                    System.out.println(sip.getSolutions() + " solutions; " + sip.getFails() + " fail nodes; " +
-                            sip.getNodes() + " nodes; " + cpuTime + " milliseconds"); // +" "+ sip.simple);
-                }
+                SIP1 sip = new SIP1(P, T);
+                sip.setFirstSolution(true); //firstSolution: true if only first solution wanted, false for all sols
+                sip.setInduced(induced); //if induced is specified in the args true, otherwise false
+                sip.setVerbose(verbose);
+                sip.setTimeLimit(timeLimit);
+                sip.setIsExperimental(isExperimental);
+                sip.solve();
+                solutions = solutions + sip.getSolutions();
+                cpuTime = System.currentTimeMillis() - cpuTime;
+                /* print stats */
+                System.out.print("Pattern " + P.getId() + " Target " + T.getId() + " ");
+                if (!sip.isTimeout()) solved++;
+                if (sip.isTimeout()) System.out.print("CPU time exceeded: ");
+                else System.out.print("Run completed: ");
+                System.out.println(sip.getSolutions() + " solutions; " + sip.getFails() + " fail nodes; " +
+                            sip.getNodes() + " nodes; " + cpuTime + " milliseconds; " +
+                            sip.filterTime +  " milliseconds; " + sip.verifyTime +  " milliseconds"); // +" "+ sip.simple);
+                totalFilterTime = totalFilterTime + sip.filterTime; // how much time did filtering take?
+                totalVerifyTime = totalVerifyTime + sip.verifyTime; // how much time did verification take?
             }
         }
 
         totalCpuTime = System.currentTimeMillis() - totalCpuTime;
         System.out.println("total cpu time: "+ totalCpuTime +" milliseconds");
+        System.out.println("total filter time: "+ totalFilterTime +" milliseconds");
+        System.out.println("total verification time: "+ totalVerifyTime +" milliseconds");
     }
 }
