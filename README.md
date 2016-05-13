@@ -31,7 +31,7 @@ with SIP1 solver and in resultsSIP0 folder after executed with SIP0 solver.
 - To run the code, download the project/out/artifacts/Iva_Index3_jar jar in the repository, go to the directory
 where the jar is saved and type the following command:
 
-    java -cp Iva-Index3.jar Main <patterns filename> <targets filename>
+    java -cp Iva-Index3.jar Main "patterns filename" "targets filename"
 
 - This runs SIP1, as this is the default solver. To run SIP0, add <-SIP0> argument after the name of the targets
 filename.
